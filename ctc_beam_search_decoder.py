@@ -179,7 +179,7 @@ def ctc_beam_search_decoder_log(probs_seq,
         return z 
 
     ## initialize
-    FLT64_MIN = np.float('-inf')
+    FLT64_MIN = np.float64('-inf')
     # the set containing selected prefixes
     prefix_set_prev = {'\t': 0.0}
     log_probs_b_prev, log_probs_nb_prev = {'\t': 0.0}, {'\t': FLT64_MIN}
