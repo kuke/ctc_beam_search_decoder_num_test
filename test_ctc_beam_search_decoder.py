@@ -8,7 +8,8 @@ from tensorflow.python.ops import array_ops
 from ctc_beam_search_decoder import *
 import time
 
-vocab_list = ['\'', ' ']+[chr(i) for i in range(97, 123)]
+vocab_list = ['\'', ' ']+[chr(i) for i in range(97, 101)]
+#vocab_list = ['\'', ' ']+[chr(i) for i in range(97, 123)]
 
 def generate_probs(num_time_steps, probs_dim):
     probs_mat = np.random.random(size=(num_time_steps, probs_dim))
@@ -16,13 +17,13 @@ def generate_probs(num_time_steps, probs_dim):
     return probs_mat
 
 def test_beam_search_decoder():
-    max_time_steps = 60
+    max_time_steps = 6
     probs_dim = len(vocab_list)+1
     beam_size = 20
-    num_results_per_sample = 5
+    num_results_per_sample = 1
         
     input_prob_matrix_0 = np.asarray(generate_probs(max_time_steps, probs_dim), dtype=np.float32)
-
+    print(input_prob_matrix_0)
     # Add arbitrary offset - this is fine
     input_log_prob_matrix_0 = np.log(input_prob_matrix_0) #+ 2.0
 
@@ -50,7 +51,8 @@ def test_beam_search_decoder():
 			probs_seq=input_prob_matrix_0,
 			beam_size=beam_size,
                         vocabulary=vocab_list,
-                        blank_id=len(vocab_list), 
+                        blank_id=len(vocab_list),
+                        cutoff_prob=1.0, 
 			)
     
     # run log- CTC beam search decoder     
@@ -58,7 +60,8 @@ def test_beam_search_decoder():
 			probs_seq=input_prob_matrix_0,
 			beam_size=beam_size,
                         vocabulary=vocab_list,
-                        blank_id=len(vocab_list),                   
+                        blank_id=len(vocab_list),       
+                        cutoff_prob=1.0,            
 			)
     # compare decoding result
     print("{tf-decoder log probs} \t {org-decoder log probs} \t{log-decoder log probs}:  {tf_decoder result}  {org_decoder result} {log-decoder result}")
