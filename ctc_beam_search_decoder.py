@@ -192,9 +192,6 @@ def ctc_beam_search_decoder_log(probs_seq,
     if nproc is True:
         global ext_nproc_scorer
         ext_scoring_func = ext_nproc_scorer
-    
-    # convert probabilities into log format
-    log_probs_seq = np.log(probs_seq)
 
     # sum of probabilitis in log format
     def log_sum_exp(x, y):
@@ -203,7 +200,7 @@ def ctc_beam_search_decoder_log(probs_seq,
         if y == FLT64_MIN:
             return x
         xmax = max(x, y)
-        z = np.log(np.exp(x-xmax)+np.exp(y-xmax))+xmax
+        z = np.log(np.exp(x-xmax) + np.exp(y-xmax)) + xmax
         return z 
 
     ## initialize
@@ -217,7 +214,6 @@ def ctc_beam_search_decoder_log(probs_seq,
         # the set containing candidate prefixes
         prefix_set_next = {}
         log_probs_b_cur, log_probs_nb_cur = {}, {}
-
         
         prob_idx = list(enumerate(probs_seq[time_step]))
         cutoff_len = len(prob_idx)
